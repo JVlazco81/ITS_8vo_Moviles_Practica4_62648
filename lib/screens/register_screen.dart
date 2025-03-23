@@ -21,12 +21,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     final success = await AuthService.register(usuario);
-    if (success && mounted) {
-      Navigator.pop(context);
-    } else {
+
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error al registrarse')),
+        SnackBar(
+          content: Text(
+            success ? '¡Registro exitoso!' : 'Error al registrarse',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: success ? Colors.greenAccent : Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.black87, width: 1),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          duration: const Duration(seconds: 2),
+        ),
       );
+
+      if (success) {
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pop(context); // volver al login después del mensaje
+        });
+      }
     }
   }
 
